@@ -7,7 +7,7 @@ namespace CSharpSupportEngineer.Model
 {
     public sealed class Calculator
     {
-        private static Regex _numberRegex = new Regex("[0-9]", RegexOptions.Compiled);
+        private static Regex _numberRegex = new Regex("[0-9]+[.0-9]*[^.]", RegexOptions.Compiled);
         private readonly IOutput _output;
         private NumberCache _numberCache = new NumberCache();
         public Calculator(IOutput output)
@@ -17,7 +17,7 @@ namespace CSharpSupportEngineer.Model
         public decimal Multiply(decimal op1, decimal op2)
         {
             _output.WriteLine($"Multiplying {op1} with {op2}");
-            var result = Convert.ToInt32(op1 * op2);
+            var result = Convert.ToDecimal(op1 * op2);
             _output.WriteLine($"Operations result is:");
             _output.WriteLine(Convert.ToDecimal(result).ToString(".00"));
             return result;
@@ -30,18 +30,18 @@ namespace CSharpSupportEngineer.Model
             decimal sum = 0;
             foreach (var match in matches)
             {
-                sum += Convert.ToInt16(match.ToString());
+                sum += Convert.ToDecimal(match.ToString());
             }
 
             _output.WriteLine($"Operations result is:");
-            _output.WriteLine(Convert.ToInt32(sum));
+            _output.WriteLine(Convert.ToDecimal(sum));
             return sum;
         }
 
-        public decimal SumEvenNumbersFromStack(decimal[] oddNumbers)
+        public decimal SumEvenNumbersFromStack(decimal[] allNumbers)
         {
-            _output.WriteLine($"Summing even ('gerade') numbers from: '{string.Join(",", oddNumbers.ToList())}'");
-            var result = oddNumbers.Where(s => s / 2 == 0).Select(s => s).Sum();
+            _output.WriteLine($"Summing even ('gerade') numbers from: '{string.Join(",", allNumbers.ToList())}'");
+            var result = allNumbers.Where(s => s % 2 == 0).Select(s => s).Sum();
             _output.WriteLine($"Sum even numbers: '{result}'");
             return result;
         }
